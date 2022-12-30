@@ -8,7 +8,10 @@ When use this approach (benefits):
 - To break long processes into small units
 - When you can perform tasks in parallel but need to escalate this processment into distributed machines
 - A single transaction is composed by different tecnologies (Ex: send order to C# service, register into bank in a c++ service, then send an confirmation e-mail via a phyton API)
+- The total time is the sum of all the steps (aggregators) times. The more parallel tasks and normalized amount of aggregators, the best
 
+When not to use it:
+- You can't break your transaction into a amount of steps with parallel tasks
 
 The main idea of this pattern:
 ![image](https://user-images.githubusercontent.com/8673745/210102138-99e31d8d-2a08-4d0f-986c-0413e0919fd1.png)
