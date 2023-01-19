@@ -4,6 +4,8 @@
 
 Long story short: It's basically a distributed 'Task.WhenAll()', but instead of deal with threads on a single machine, we are dealing with completely decoupled units of work (workers).
 
+The main goal is to break a transaction into a combination of micro-transactions based on small steps. Each step must have all the tasks that can run in parallel. The aggregator component for each step, should evaluate the state of all the tasks and decide to move next or call out an error state.
+
 When to use this approach:
 + To break a (async) complex transaction having long processes into small units
 + A single transaction is composed by different tecnologies (Ex: send order to C# service, register into bank in a c++ service, then send an confirmation e-mail via a phyton API)
@@ -32,13 +34,6 @@ Drawbacks:
 - Adds considerable network traffic (communications) in order to orchestrate the distributed task execution. You'll need to manage the communication between all components
 - With this approach, your transaction becomes non-linear. Think about the Chain of Responsibility pattern. It's hard maintain
 
-The main idea of this pattern:
-![image](https://user-images.githubusercontent.com/8673745/210102138-99e31d8d-2a08-4d0f-986c-0413e0919fd1.png)
-
-![image](https://user-images.githubusercontent.com/8673745/210102156-5e57986c-4345-45b0-9e54-2e460f8f7006.png)
-
-The main goal is to break a transaction into a combination of micro-transactions based on small steps. Each step must have all the tasks that can run in parallel. The aggregator component for each step, should evaluate the state of all the tasks and decide to move next or call out an error state.
-
 The main components of this pattern are:
 
 ### Transaction
@@ -60,10 +55,10 @@ A unit of work. This component is responsible for **execute** your process and *
 ### Sequence Diagram:
 
 ![pattern-diagram-Sequence](https://user-images.githubusercontent.com/8673745/213585083-ceb95021-6c14-4cc9-9769-0de903f2dd6b.png)
+TODO: evaluate if it's possible to remove OnBegin Event, for a lightweight processing. The less communications and events, the better
 
 ## A use case example:
-
-![image](https://user-images.githubusercontent.com/8673745/210114851-b13a0b7e-1302-4953-ae18-ffa5dcd8b23c.png)
+TODO
 
 
 
