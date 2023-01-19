@@ -60,5 +60,8 @@ TODO: evaluate if it's possible to remove OnBegin Event, for a lightweight proce
 ## A use case example:
 TODO
 
-
-
+Related patterns and ideas:
+- Aggregator Pattern
+- Saga Pattern
+- Chain of responsibility (process chain)
+- Semaphore
