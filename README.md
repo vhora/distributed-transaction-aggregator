@@ -19,6 +19,9 @@ Long story short: It's basically a distributed 'Task.WhenAll()', but instead of 
 
 The main goal is to break a transaction into a combination of micro-transactions based on small steps. Each step must have all the tasks that can run in parallel. The aggregator component for each step, should evaluate the state of all the tasks and decide to move next or call out an error state.
 
+The total time is the sum of all the steps (aggregators) times. The more parallel tasks and normalized amount of aggregators, the best:
+![image](https://user-images.githubusercontent.com/8673745/213585812-01330065-13d7-48fd-996e-f4e3521877be.png)
+
 When to use this approach:
 + To break a (async) complex transaction having long processes into small units
 + A single transaction is composed by different tecnologies (Ex: send order to C# service, register into bank in a c++ service, then send an confirmation e-mail via a phyton API)
@@ -33,9 +36,6 @@ Benefits:
 ![image](https://user-images.githubusercontent.com/8673745/213585776-5b4d11ab-084e-4ba2-9ff3-aaa0967bde2f.png)
 + You'll be able to identify the status of the transaction. In case of error, the transaction will be stalled at one specific aggregator/step
 + Small and distibuted units of work (Tasks)
-+ The total time is the sum of all the steps (aggregators) times. The more parallel tasks and normalized amount of aggregators, the best
-![image](https://user-images.githubusercontent.com/8673745/213585812-01330065-13d7-48fd-996e-f4e3521877be.png)
-
 
 When **not** to use it:
 - Your transaction needs to be sync
