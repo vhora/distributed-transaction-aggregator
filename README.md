@@ -2,8 +2,8 @@
 
 > Project status: Work in progress ⚠️
 
-![Badge](https://img.shields.io/static/v1?label=architecture&color=blue&style=for-the-badge)
-![Badge](https://img.shields.io/static/v1?label=distributed%20services&color=blue&style=for-the-badge)
+![Badge](https://img.shields.io/static/v1?label=architecture&message=&color=blue&style=for-the-badge)
+![Badge](https://img.shields.io/static/v1?label=distributed%20services&message=&color=blue&style=for-the-badge)
 
 ### Table of content
    * [Why do I need DTA?](#why-do-i-need-dta)
