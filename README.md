@@ -1,8 +1,21 @@
-[WORK IN PROGRESS]
-
 # Distributed Transaction Aggregator (DTA)
 
-Long story short: It's basically a distributed 'Task.WhenAll()', but instead of deal with threads on a single machine, we are dealing with completely decoupled units of work (workers).
+> Project status: Work in progress ⚠️
+
+![Badge](https://img.shields.io/static/v1?label=architecture&message=framework&color=blue&style=for-the-badge)
+![Badge](https://img.shields.io/static/v1?label=distributed%20%services&message=framework&color=blue&style=for-the-badge)
+
+### Table of content
+   * [Why do I need DTA?](#why-do-i-need-dta)
+   * [The pattern components](#the-pattern-components)
+   * [Putting all together](#putting-all-together)
+   * [Use cases and examples](#use-cases-and-examples)
+   * [Related patterns and ideas](#related-patterns-and-ideas)
+   * [Contributors](#contributors)
+
+### Why do I need DTA?
+
+Long story short: It's basically a distributed 'Task.WhenAll()', but instead of dealing with threads on a single machine, we are dealing with completely decoupled and distributed units of work.
 
 The main goal is to break a transaction into a combination of micro-transactions based on small steps. Each step must have all the tasks that can run in parallel. The aggregator component for each step, should evaluate the state of all the tasks and decide to move next or call out an error state.
 
@@ -34,34 +47,42 @@ Drawbacks:
 - Adds considerable network traffic (communications) in order to orchestrate the distributed task execution. You'll need to manage the communication between all components
 - With this approach, your transaction becomes non-linear. Think about the Chain of Responsibility pattern. It's hard maintain
 
+### The pattern components
+
 The main components of this pattern are:
 
-### Transaction
+#### Transaction
 
 A transaction is a combined and complex **set of tasks** in order to perform an **action**.
 
 Think about an example of an e-commerce Order transaction. An order represents a purchase of a product.
 
-### Aggregator (Step)
+#### Aggregator (Step)
 
 Acts like a semaphore, and must know the required tasks in order to call the next step. Each **aggregator** represents a single **step**, and is responsible for deal with the state related to all the tasks that belongs to its respective step. Each **Aggregator/Step** must be composed by at least one **Task**.
 
 All of the recovery logic must be placed on the Aggregator component. It must be completely responsible for evaluate the step state and decide to move forward or recover some falty state.
 
-### Task
+#### Task
 
 A unit of work. This component is responsible for **execute** your process and **notify** the aggregator in order to proceed with the other steps of a transaction. A step (aggregator) can contain one or more tasks.
 
-### Sequence Diagram:
+### Putting all together
+#### Sequence Diagram:
 
 ![pattern-diagram-Sequence](https://user-images.githubusercontent.com/8673745/213585083-ceb95021-6c14-4cc9-9769-0de903f2dd6b.png)
 TODO: evaluate if it's possible to remove OnBegin Event, for a lightweight processing. The less communications and events, the better
 
-## A use case example:
+### Use cases and examples:
 TODO
 
-Related patterns and ideas:
+### Related patterns and ideas:
 - Aggregator Pattern
 - Saga Pattern
 - Chain of responsibility (process chain)
 - Semaphore
+
+### Contributors: 
+|Name|Email|GitHub|
+| -------- | -------- | -------- |
+|Victor da Hora|vhhora@gmail.com|https://github.com/vhora|
