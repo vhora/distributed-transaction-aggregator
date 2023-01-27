@@ -25,6 +25,7 @@ The total time is the sum of all the steps (aggregators) times. The more paralle
 When to use this approach:
 + To break a (async) complex transaction having long processes into small units
 + A single transaction is composed by different tecnologies (Ex: send order to C# service, register into bank in a c++ service, then send an confirmation e-mail via a phyton API)
++ When you have a "pipeline" like process 
 + When you have bottlenecks in your transaction, and parallel processing could improve your transaction performance
 + When you can perform steps of a transaction in parallel
 + When you need to escalate processment into distributed machines
@@ -61,7 +62,7 @@ Think about an example of an e-commerce Order transaction. An order represents a
 
 Acts like a semaphore, and must know the required tasks in order to call the next step. Each **aggregator** represents a single **step**, and is responsible for deal with the state related to all the tasks that belongs to its respective step. Each **Aggregator/Step** must be composed by at least one **Task**.
 
-All of the recovery logic must be placed on the Aggregator component. It must be completely responsible for evaluate the step state and decide to move forward or recover some falty state.
+All of the recovery logic must be placed on the Aggregator component. It must be completely responsible for evaluate the step state and decide to move forward or recover some falty state. This component has the same principle of a mediator object.
 
 #### Task
 
