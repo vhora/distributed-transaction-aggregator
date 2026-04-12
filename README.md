@@ -1,4 +1,4 @@
-# Distributed Transaction Aggregator (DTA)
+# Distributed Transaction Aggregator (DTA) - Workflow-like Saga orchestration
 
 ![Badge](https://img.shields.io/badge/status-work%20in%20progress-yellow)
 ![Badge](https://img.shields.io/badge/topics-architecture-blue)
@@ -15,9 +15,9 @@
 
 ### Why do I need DTA?
 
-Distributed Transaction Aggregator is not a new design pattern, it's a proposal on top of a combination of distributed transaction patterns like Saga + Orchestrator and Fork-join. The purpose of this design is to establish clear boundaries and responsibilities per component as part of your business transactions (Transactions), with a specific mix of fork-join/orchestration (Aggreggator component).
+Distributed Transaction Aggregator is not a new design pattern, it's a specific implementation of the combination of Saga/Orchestrator and Fork-join distributed transaction patterns. The purpose of this design is to establish clear boundaries and responsibilities per component as part of your business transactions (Transactions), with a specific mix of fork-join/orchestration (Aggreggator component), turning the open aspects of these patterns into a **workflow process**.
 
-Long story short: It's basically a distributed 'Task.WhenAll()', but instead of dealing with threads on a single machine, we are dealing with completely decoupled and distributed units of work.
+Long story short: It's a stage-based orchestration, combining joint operations to establish a durable and traceable workflow progression.
 
 The main goal is to break a transaction into a combination of micro-transactions composed by smaller steps. Each step must have all the tasks that can run in parallel. The aggregator component for each step, should evaluate the state of all the tasks and decide to move next or call out an error state.
 
@@ -70,7 +70,7 @@ Optional for implementation:
 
 Acts like join node, and must know the required tasks in order to call the next step. Each **aggregator** represents a single **step**, and is responsible for deal with the state related to all the tasks that belongs to its respective step. Each **Aggregator/Step** must be composed by at least one **Task**.
 
-All of the recovery logic must be placed on the Aggregator component. It must be completely responsible for evaluate the step state and decide to move forward or recover some falty state. This component has the same principle of a mediator object.
+The recovery logic must be placed on the Aggregator component as triggers for compensation actions (although local retries and the actual business logic for the compensation should remain in the domain systems). It must be completely responsible for evaluating the step state and decide to move forward or recover some falty state. This component has the same principle of a mediator object.
 
 The main responsibilities of the Aggregator are:
 - Ensure clear sequencing: In case a step is not finished yet (all the taks within step completed) and another task is executed from the next step, the transaction must enter an error state and trigger a compensation action
@@ -100,6 +100,14 @@ When moving to this status, notify the Aggregator that the task "Freeze stock" h
 NOTE: The aggregator should never react to business-specific concepts, like STOCK_RELEASE, PAYMENT_COMPLETED, it should be task-oriented, which means: STARTED, COMPLETED or FAILED (compensation action)
 
 ### Putting all together
+
+The relationship between components:
+- A **Transaction** can be a conceptual composition of all the aggregators sequencing or an actual entity in the system composed by the status of all the aggregators
+- An **Aggregator** coordinates the tasks (tracks stage status, trigger next stage or compensation action)
+- The **Tasks** executes business logic
+- The **Tasks** owns domain integration
+- The **Aggregator** tracks task lifecycle only (COMPLETED, FAILED - STARTED not mandatory)
+
 #### Sequence Diagram:
 NOTE: Looking for a real-world implementation to map as part of this proposal and case. The following suggestion is still theoretical, so some components need optimization to polish this material.
 
