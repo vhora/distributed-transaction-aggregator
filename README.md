@@ -76,6 +76,7 @@ The main responsibilities of the Aggregator are:
 - Ensure clear sequencing: In case a step is not finished yet (all the taks within step completed) and another task is executed from the next step, the transaction must enter an error state and trigger a compensation action
 - Decide to move forward to the next step: Only move to the next step once all the tasks within the current step are completed (state machine behavior)
 - System recovery: In case of errors or timeouts, the aggregator can have retry policies and trigger the compensation action once recovery was not possible
+- Trigger next actions: As oppose to Coreography design, the Aggregator is responsible for triggering the steps, since it's a variation of the Orchestration approach - As a trade-off, the Aggregator shouldn't know how to integrate to business systems, process business logic or payloads, so it should be an agnostic trigger (event or direct integration, but without business related data), so your transaction continues. In practice, that means you will need the Tasks (business systems actions) to fetch data from the previous state to move forward with your transaction
 
 Aggregators must-haves:
 - Durable state
