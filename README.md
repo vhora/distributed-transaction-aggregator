@@ -43,11 +43,12 @@ Benefits:
 
 When **not** to use it:
 - Your transaction needs to be sync
-- You can't break your transaction into a amount of steps with parallel tasks
+- You can't break your transaction into steps with parallel tasks
 - You can perform all of the steps of your transaction in batches - no need for transactional (preferable to use a job/workflow orchestration solution)
 
 Drawbacks:
 - Adds complexity to manage the state of transactions
+- The progress through steps depends on state management/extra checks
 - Adds considerable network traffic (communications) in order to orchestrate the distributed task execution. You'll need to manage the communication between all components
 - With this approach, your transaction becomes non-linear. Think about the Chain of Responsibility pattern. It's hard maintain
 
